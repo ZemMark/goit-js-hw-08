@@ -29,10 +29,23 @@ function dataRestor() {
   } catch (error) {
     console.log('smth went wrong');
   }
-  if (!givenData) {
+  if (givenData) {
+    console.log(givenData);
+    refs.form.elements.email.value = parsedData.email;
+    refs.form.elements.message.value = parsedData.message;
+  } else {
     refs.form.elements.email.value = '';
     refs.form.elements.message.value = '';
   }
-  refs.form.elements.email.value = parsedData.email;
-  refs.form.elements.message.value = parsedData.message;
+  if (
+    refs.form.elements.email.value === '' ||
+    refs.form.elements.message.value !== ''
+  ) {
+    refs.form.elements.email.value = '';
+  } else if (
+    refs.form.elements.email.value !== '' ||
+    refs.form.elements.message.value === ''
+  ) {
+    parsedData.message = '';
+  }
 }
