@@ -10,8 +10,8 @@ refs.form.addEventListener(
   'input',
   throttle(e => {
     fd[e.target.name] = e.target.value;
-    const preData = JSON.stringify(fd);
-    unparsedData = localStorage.setItem(FEEDBACK_DATA, JSON.parse(fd));
+    fdJSON = JSON.stringify(fd);
+    localStorage.setItem(FEEDBACK_DATA, fdJSON);
   }, 1000)
 );
 dataRestor();
@@ -23,12 +23,16 @@ function onFormSubmit(e) {
 
 function dataRestor() {
   const givenData = localStorage.getItem(FEEDBACK_DATA);
-  console.log(givenData);
-  // const parsedData = JSON.parse(givenData);
-  if (givenData) {
-    // refs.form.elements.email.value = parsedData.email;
-    // refs.form.elements.message.value = parsedData.message;
+  let parsedData;
+  try {
+    parsedData = JSON.parse(givenData);
+  } catch (error) {
+    console.log('smth went wrong');
   }
-  refs.form.elements.email.value = '';
-  refs.form.elements.message.value = '';
+  if (!givenData) {
+    refs.form.elements.email.value = '';
+    refs.form.elements.message.value = '';
+  }
+  refs.form.elements.email.value = parsedData.email;
+  refs.form.elements.message.value = parsedData.message;
 }
