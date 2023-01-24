@@ -4,48 +4,74 @@ const refs = {
   form: document.querySelector('form'),
 };
 const fd = {};
-let unparsedData = {};
+// let parsedData;
+// dataRestor();
+// refs.form.addEventListener('submit', onFormSubmit);
+// refs.form.addEventListener(
+//   'input',
+//   throttle(e => {
+//     fd[e.target.name] = e.target.value;
+//     const fdJSON = JSON.stringify(fd);
+//     localStorage.setItem(FEEDBACK_DATA, fdJSON);
+//   }, 1000)
+// );
+
+// function onFormSubmit(e) {
+//   e.preventDefault();
+//   e.currentTarget.reset();
+//   localStorage.removeItem(FEEDBACK_DATA);
+//   console.log(fd);
+// }
+
+// function dataRestor() {
+//   const givenData = localStorage.getItem(FEEDBACK_DATA);
+//   parsedData = JSON.parse.apply(givenData);
+//   console.log(parsedData.nmae);
+//   if (givenData) {
+//     if (
+//       refs.form.elements.email.value === '' ||
+//       refs.form.elements.message.value !== ''
+//     ) {
+//       refs.form.elements.email.value = parsedData.email;
+//     } else if (
+//       refs.form.elements.email.value !== '' ||
+//       refs.form.elements.message.value === ''
+//     ) {
+//       parsedData.message = '';
+//     }
+//   }
+// }
+let parsedData;
 refs.form.addEventListener('submit', onFormSubmit);
 refs.form.addEventListener(
   'input',
   throttle(e => {
     fd[e.target.name] = e.target.value;
-    fdJSON = JSON.stringify(fd);
+    const fdJSON = JSON.stringify(fd);
     localStorage.setItem(FEEDBACK_DATA, fdJSON);
   }, 1000)
 );
-dataRestor();
+
+dataRestore();
 function onFormSubmit(e) {
   e.preventDefault();
   e.currentTarget.reset();
   localStorage.removeItem(FEEDBACK_DATA);
+  console.log(parsedData);
 }
 
-function dataRestor() {
+function dataRestore(e) {
   const givenData = localStorage.getItem(FEEDBACK_DATA);
-  let parsedData;
   try {
     parsedData = JSON.parse(givenData);
-  } catch (error) {
-    console.log('smth went wrong');
-  }
-  if (givenData) {
-    console.log(givenData);
+    if (!parsedData.email) {
+      throw new SyntaxError('error: no email');
+    }
     refs.form.elements.email.value = parsedData.email;
     refs.form.elements.message.value = parsedData.message;
-  } else {
-    refs.form.elements.email.value = '';
-    refs.form.elements.message.value = '';
-  }
-  if (
-    refs.form.elements.email.value === '' ||
-    refs.form.elements.message.value !== ''
-  ) {
-    refs.form.elements.email.value = '';
-  } else if (
-    refs.form.elements.email.value !== '' ||
-    refs.form.elements.message.value === ''
-  ) {
-    parsedData.message = '';
+    // if (parsedData.message) {
+    // }
+  } catch (e) {
+    console.log('JSON error' + e);
   }
 }

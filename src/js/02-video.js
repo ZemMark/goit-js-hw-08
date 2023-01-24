@@ -11,4 +11,5 @@ player.on(
     localStorage.setItem(VIDEOLOCALPROGRESS_KEY, data.seconds);
   }, 1000)
 );
-player.setCurrentTime(localStorage.getItem(VIDEOLOCALPROGRESS_KEY));
+
+player.setCurrentTime(localStorage.getItem(VIDEOLOCALPROGRESS_KEY) || 0);
